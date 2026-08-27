@@ -48,8 +48,8 @@ Trados Studio 2022 (Studio17) assemblies in a Windows 11 Parallels VM.
    ```
 
    The key is intentionally excluded from Git.
-5. Build - this deploys the `.sdlplugin` directly to
-   `%AppData%\Trados\Trados Studio\17\Plugins\Packages\`.
+5. Build - this creates the distributable `.sdlplugin` under `bin\Release` (or `bin\Debug`)
+   and deploys it to `%AppData%\Trados\Trados Studio\17\Plugins\Packages\`.
 6. Start Trados Studio and accept the "uncertified plug-in" prompt.
 7. Configure via the provider's settings (API key, model, termbase TBX path, prompt template path).
 
