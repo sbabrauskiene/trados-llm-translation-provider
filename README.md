@@ -4,6 +4,11 @@ A personal Trados Studio 2022 Translation Provider plugin that translates segmen
 (OpenAI first, via a pluggable `ILlmClient` abstraction), with TBX termbase enforcement and
 inline-tag-safe placeholder handling.
 
+## Download
+
+The ready-to-install Trados Studio 2022 package is available at
+[`releases/Trados.LlmTranslationProvider-1.0.0.sdlplugin`](releases/Trados.LlmTranslationProvider-1.0.0.sdlplugin).
+
 ## Why
 
 Free AppStore LLM plugins for Trados Studio proved unreliable (crashes tied to their
