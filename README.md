@@ -27,20 +27,10 @@ scoped for personal use, installed directly as a local plugin package (no AppSto
 - `Security/ApiKeyStore` - encrypts the OpenAI API key via Windows DPAPI; never stored in the
   provider URI or project files.
 
-## Status / known risk areas
+## Status
 
-This was built without the ability to compile against the actual Trados Studio SDK assemblies
-(developed on macOS against a Windows VM). Areas most likely to need adjustment on first build:
-
-- Exact `Sdl.Core.PluginFramework` NuGet package version available for restore (see comments in
-  the `.csproj`).
-- The exact full member list of `ITranslationProviderLanguageDirection`/`ITranslationProvider` on
-  your specific installed build (mitigated by inheriting RWS's `AbstractMachineTranslationProvider`
-  / `AbstractMachineTranslationProviderLanguageDirection` base classes instead of implementing the
-  raw interfaces, but not zero-risk).
-
-If Visual Studio reports missing/extra interface members or NuGet restore failures, that's
-expected on the first build - fix based on the exact compiler error.
+The project has been restored, compiled, strong-name signed, and packaged successfully against the
+Trados Studio 2022 (Studio17) assemblies in a Windows 11 Parallels VM.
 
 ## Setup
 
@@ -48,10 +38,20 @@ expected on the first build - fix based on the exact compiler error.
 2. Restore NuGet packages.
 3. Ensure the project's `Sdl.LanguagePlatform.*` references point at your installed
    `C:\Program Files (x86)\Trados\Trados Studio\Studio17\` folder.
-4. Build - this deploys the `.sdlplugin` directly to
+4. Generate a local strong-name key once from Windows PowerShell:
+
+   ```powershell
+   $keyPath = Join-Path $PWD "Trados.LlmTranslationProvider\Trados.LlmTranslationProvider.snk"
+   $rsa = New-Object System.Security.Cryptography.RSACryptoServiceProvider 2048
+   [System.IO.File]::WriteAllBytes($keyPath, $rsa.ExportCspBlob($true))
+   $rsa.Dispose()
+   ```
+
+   The key is intentionally excluded from Git.
+5. Build - this deploys the `.sdlplugin` directly to
    `%AppData%\Trados\Trados Studio\17\Plugins\Packages\`.
-5. Start Trados Studio and accept the "uncertified plug-in" prompt.
-6. Configure via the provider's settings (API key, model, termbase TBX path, prompt template path).
+6. Start Trados Studio and accept the "uncertified plug-in" prompt.
+7. Configure via the provider's settings (API key, model, termbase TBX path, prompt template path).
 
 ## Not implemented yet
 

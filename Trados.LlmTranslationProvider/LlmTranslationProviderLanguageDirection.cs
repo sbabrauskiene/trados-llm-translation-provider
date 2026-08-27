@@ -66,6 +66,11 @@ namespace Trados.LlmTranslationProvider
             return CreateSearchResultsFromTranslations(segments, translations);
         }
 
+        protected override SearchResults SearchSingleSegmentInternal(SearchSettings settings, Segment segment)
+        {
+            return SearchMultipleSegmentsInternal(settings, new List<Segment> { segment })[0];
+        }
+
         private Segment TranslateOneSegment(
             Segment segment,
             LlmTranslationOptions options,

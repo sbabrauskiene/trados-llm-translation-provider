@@ -3,7 +3,7 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6C3F1A2E-6B0B-4C1E-9C7B-9A2B7B6A0F31}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Trados.LlmTranslationProvider</RootNamespace>
@@ -14,25 +14,27 @@
     <!-- Allows this classic-style project to use <PackageReference> instead of packages.config. -->
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <LangVersion>7.3</LangVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Trados.LlmTranslationProvider.snk</AssemblyOriginatorKeyFile>
     <!-- Build output goes straight to Studio's plugin Packages folder so the .sdlplugin is deployed on every build. -->
     <OutputPath>$(AppData)\Trados\Trados Studio\17\Plugins\Packages\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -45,37 +47,34 @@
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(PkgNewtonsoft_Json)\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <!--
       Trados Studio 2022 (Studio17) assemblies.
-      Private=False: these ship with Trados Studio itself, so they must NOT be copied into our
-      plugin package - Studio will provide them from its own installation folder at runtime.
       If your Studio installation lives at a different path, update the HintPath values below.
     -->
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
       <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
-      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework">
+      <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <!--
-      Version pins target the plugin framework version Studio 17.0 itself expects (see
-      pluginconfig.xml in the Studio17 install folder: PublicAssembly Sdl.Core.PluginFramework
-      version="1.8"). If NuGet restore fails because 1.8.x is no longer listed, open the NuGet
-      Package Manager UI in Visual Studio and install/update to the latest available 1.8.x
-      release (or the closest available version) instead of editing this by hand.
-    -->
-    <PackageReference Include="Sdl.Core.PluginFramework" Version="1.8.0" />
-    <!-- Build-time only: generates the .plugin.xml manifest and .sdlplugin package. Any recent version works. -->
-    <PackageReference Include="Sdl.Core.PluginFramework.Build" Version="17.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" GeneratePathProperty="true" />
+    <!-- Build-time only: generates the .plugin.xml manifest and .sdlplugin package for Studio 17. -->
+    <PackageReference Include="Sdl.Core.PluginFramework.Build" Version="17.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,12 +94,13 @@
     <Compile Include="UI\LlmTranslationProviderWinFormsUI.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\PluginResources.resx">
+    <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="pluginpackage.manifest.xml" />
+    <None Include="Trados.LlmTranslationProvider.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

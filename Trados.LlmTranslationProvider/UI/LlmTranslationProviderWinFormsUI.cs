@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using Sdl.Core.Globalization;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Trados.LlmTranslationProvider.UI

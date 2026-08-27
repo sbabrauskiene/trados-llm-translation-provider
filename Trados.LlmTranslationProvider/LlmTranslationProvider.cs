@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sdl.Core.Globalization;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Trados.LlmTranslationProvider
@@ -50,7 +51,7 @@ namespace Trados.LlmTranslationProvider
         {
             // No live connection/session to check - each translation request is a self-contained
             // HTTP call, so the provider is always considered ready.
-            return new ProviderStatusInfo();
+            return new ProviderStatusInfo(true, "Available");
         }
     }
 }
